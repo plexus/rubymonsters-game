@@ -34,7 +34,7 @@ window.addEventListener('load',function(e) {
     Q.scene("start",function(stage) {
 
         // A basic sprite shape a asset as the image
-        var sprite1 = new Q.Sprite({ x: 325, y: 400, asset: 'monster1.png',
+        var sprite1 = new Q.Sprite({ x: 325, y: 400, asset: 'monster.gif',
                                      angle: 0, collisionMask: 0, scale: 1});
         sprite1.p.points = [
             [ -50, -50 ],
@@ -44,7 +44,7 @@ window.addEventListener('load',function(e) {
         ];
         stage.insert(sprite1);
         // Add the 2D component for collision detection and gravity.
-        sprite1.add('2d')
+        sprite1.add('2d, platformerControls')
 
         sprite1.on('step',function() {
 
@@ -74,21 +74,21 @@ window.addEventListener('load',function(e) {
         });
 
         // Bind the basic inputs to different behaviors of sprite1
-        Q.input.on('up',stage,function(e) {
-            sprite1.p.vy = - 300;
-        });
-
-        // Q.input.on('down',stage,function(e) {
-        //     sprite1.p.scale += 0.1;
+        // Q.input.on('up',stage,function(e) {
+        //     sprite1.p.vy = - 300;
         // });
 
-        Q.input.on('left',stage,function(e) {
-            sprite1.p.vx -= 100;
-        });
+        // // Q.input.on('down',stage,function(e) {
+        // //     sprite1.p.scale += 0.1;
+        // // });
 
-        Q.input.on('right',stage,function(e) {
-            sprite1.p.vx += 100;
-        });
+        // Q.input.on('left',stage,function(e) {
+        //     sprite1.p.vx -= 100;
+        // });
+
+        // Q.input.on('right',stage,function(e) {
+        //     sprite1.p.vx += 100;
+        // });
 
         Q.input.on('fire',stage,function(e) {
             sprite1.p.vy = - 500;
@@ -107,7 +107,7 @@ window.addEventListener('load',function(e) {
         //stage.on('postrender',drawLines);
     });
 
-    Q.load('monster1.png',function() {
+    Q.load('monster.gif',function() {
 
         // Start the show
         Q.stageScene("start");
