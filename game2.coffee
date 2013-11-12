@@ -87,6 +87,9 @@ Game = ->
         color: random_color()
         w: BLOCK_SIZE
         h: BLOCK_SIZE
+    #    gravity: 0
+    #@add '2d'
+
 
     draw: (ctx) ->
       ctx.fillStyle = @p.color
@@ -95,6 +98,7 @@ Game = ->
   Q.scene "start", (stage) ->
     player = new Q.Player({stage: stage})
     stage.insert player
+    stage.add('viewport').follow(player,{ x: true, y: true })
     y = 0
 
     Game.score_label = stage.insert(new Q.UI.Text(
@@ -137,21 +141,21 @@ Game = ->
 
 Level = [
   "......          .",
-  "xx xxx      ....x",
+  "xxxxxx      ....x",
   ".   ......  xxxxx",
   "    xxxxxx  ",
-  "...... . x.....x",
-  "xx xxx   xxxxx.x ",
-  "..     .   ....x",
-  "xx   ..x.. xxxxx",
-  ".    xx.xx ",
-  "........... xxxx",
-  "xxxxxx   xxxxxx",
-  "x.............x",
-  "x    xx  xx   x",
+  "...... . x.....                  ",
+  "xx xxx   xxxxxxxxxxxxxxxxxxx          ",
+  "..     .   ....x.......               ",
+  "xx   ..x.. xxxxx.......xxxx             ",
+  ".    xx.xx      xxxxxxx   xxx          ",
+  "........... xxxx            xxx          ",
+  "xxxxxx   xxxxxx               xxx        ",
+  "x.............x                 xxx     ",
+  "x    xx  xx   x                        ",
   "x      xx     x ",
   "x.............x ",
-  "xxxxxxxxxxxxxxx",
+  "xxxxxxxxxxxxxxx                             ",
   ]
 
 FACE_DELAY = 8

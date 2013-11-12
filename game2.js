@@ -130,6 +130,10 @@
         stage: stage
       });
       stage.insert(player);
+      stage.add('viewport').follow(player, {
+        x: true,
+        y: true
+      });
       y = 0;
       Game.score_label = stage.insert(new Q.UI.Text({
         x: Q.width - 250,
@@ -176,7 +180,7 @@
     });
   };
 
-  Level = ["......          .", "xx xxx      ....x", ".   ......  xxxxx", "    xxxxxx  ", "...... . x.....x", "xx xxx   xxxxx.x ", "..     .   ....x", "xx   ..x.. xxxxx", ".    xx.xx ", "........... xxxx", "xxxxxx   xxxxxx", "x.............x", "x    xx  xx   x", "x      xx     x ", "x.............x ", "xxxxxxxxxxxxxxx"];
+  Level = ["......          .", "xxxxxx      ....x", ".   ......  xxxxx", "    xxxxxx  ", "...... . x.....                  ", "xx xxx   xxxxxxxxxxxxxxxxxxx          ", "..     .   ....x.......               ", "xx   ..x.. xxxxx.......xxxx             ", ".    xx.xx      xxxxxxx   xxx          ", "........... xxxx            xxx          ", "xxxxxx   xxxxxx               xxx        ", "x.............x                 xxx     ", "x    xx  xx   x                        ", "x      xx     x ", "x.............x ", "xxxxxxxxxxxxxxx                             "];
 
   FACE_DELAY = 8;
 
