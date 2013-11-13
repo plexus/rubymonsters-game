@@ -1,0 +1,12 @@
+npm install -g cordova
+cordova create monster org.rubymonsters.monster "RubyMonster"
+cordova platform add android
+cordova build
+
+# Android device manager
+android
+# Tools > Manage AVDs > create AVD
+
+cordova emulate android
+
+adb -s emulator-5554 logcat
