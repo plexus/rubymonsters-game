@@ -10,3 +10,8 @@ android
 cordova emulate android
 
 adb -s emulator-5554 logcat
+
+## FastCanvas
+## https://github.com/phonegap/phonegap-plugin-fast-canvas
+npm install -g plugman
+plugman --platform android --project monster --plugin https://github.com/FastCanvas/FastCanvas.git

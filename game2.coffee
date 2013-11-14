@@ -4,6 +4,18 @@ random_color = ->
 Game = ->
   window.Q = Quintus(development: true).include("Sprites, Scenes, 2D, Input, UI").setup(maximize: true)
 
+  Q.component 'autoFlip',
+    added: ->
+      @entity.on("step", this, "flipStep")
+
+    flipStep: ->
+      p = @entity.p
+      if (Q.inputs['left'])
+        p.flip = 'x'
+      if (Q.inputs['right'])
+        p.flip = false
+
+
   Q.Sprite.extend "Player",
     init: (p) ->
       @_super p,
@@ -19,11 +31,15 @@ Game = ->
         points: [[-50, -50], [40, -50], [40, 40], [-50, 40]]
         salto: 0
         score: 0
-        scroll_up: 0
         speed_wakkel: false
 
       @update_face()
-      @add "2d, platformerControls"
+      @add "2d, platformerControls, autoFlip"
+
+      window.addEventListener 'deviceorientation', (eventData) =>
+        # gamma is the left-to-right tilt in degrees, where right is positive
+        tilt_lr = eventData.gamma
+        @p.vx = tilt_lr
 
     step: ->
       @p.face_count -= 1
@@ -35,13 +51,6 @@ Game = ->
       if @p.face_count < 0
         @p.face_count = FACE_DELAY
         @next_face()
-      if @p.y > (Q.height) && @p.scroll_up <= 0
-        @p.scroll_up = BLOCK_SIZE * 3
-      if @p.scroll_up > 0
-        @p.scroll_up -= 4
-        Q('Block').each  -> @p.y -= 4
-        Q('Player').each -> @p.y -= 4
-        Q('Ruby').each   -> @p.y -= 4
 
     next_face: ->
       @p.current_face += 1

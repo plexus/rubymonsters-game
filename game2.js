@@ -12,8 +12,24 @@
     }).include("Sprites, Scenes, 2D, Input, UI").setup({
       maximize: true
     });
+    Q.component('autoFlip', {
+      added: function() {
+        return this.entity.on("step", this, "flipStep");
+      },
+      flipStep: function() {
+        var p;
+        p = this.entity.p;
+        if (Q.inputs['left']) {
+          p.flip = 'x';
+        }
+        if (Q.inputs['right']) {
+          return p.flip = false;
+        }
+      }
+    });
     Q.Sprite.extend("Player", {
       init: function(p) {
+        var _this = this;
         this._super(p, {
           asset: Game.Assets.monster_faces[0],
           hitPoints: 10,
@@ -27,11 +43,15 @@
           points: [[-50, -50], [40, -50], [40, 40], [-50, 40]],
           salto: 0,
           score: 0,
-          scroll_up: 0,
           speed_wakkel: false
         });
         this.update_face();
-        return this.add("2d, platformerControls");
+        this.add("2d, platformerControls, autoFlip");
+        return window.addEventListener('deviceorientation', function(eventData) {
+          var tilt_lr;
+          tilt_lr = eventData.gamma;
+          return _this.p.vx = tilt_lr;
+        });
       },
       step: function() {
         this.p.face_count -= 1;
@@ -44,22 +64,7 @@
         }
         if (this.p.face_count < 0) {
           this.p.face_count = FACE_DELAY;
-          this.next_face();
-        }
-        if (this.p.y > Q.height && this.p.scroll_up <= 0) {
-          this.p.scroll_up = BLOCK_SIZE * 3;
-        }
-        if (this.p.scroll_up > 0) {
-          this.p.scroll_up -= 4;
-          Q('Block').each(function() {
-            return this.p.y -= 4;
-          });
-          Q('Player').each(function() {
-            return this.p.y -= 4;
-          });
-          return Q('Ruby').each(function() {
-            return this.p.y -= 4;
-          });
+          return this.next_face();
         }
       },
       next_face: function() {
