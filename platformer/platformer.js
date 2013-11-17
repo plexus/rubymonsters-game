@@ -12,10 +12,8 @@
     }).include("Sprites, Scenes, 2D, Input, UI, Touch, Anim").setup({
       maximize: true
     }).controls();
-    console.log("Platformer");
     Q.Sprite.extend("Player", {
       init: function(p) {
-        console.log("init herman");
         this._super(p, {
           sprite: "player",
           sheet: "herman",
@@ -26,20 +24,23 @@
           speed: 400,
           jumpSpeed: -600
         });
-        return this.add('2d, platformerControls, animation');
+        return this.add('2d, platformerControls, animation, alwaysFaceFront');
       },
       step: function() {
         if (this.p.vx === 0) {
-          this.play("stand");
+          return this.play("stand");
         } else {
-          this.play("run");
+          return this.play("run");
         }
-        if (this.p.vx > 0) {
-          this.p.flip = 'x';
-        }
-        if (this.p.vx < 0) {
-          return this.p.flip = false;
-        }
+      }
+    });
+    Q.Sprite.extend("Gun", {
+      init: function(p) {
+        this._super(p, {
+          asset: "gun.png",
+          flip: 'x'
+        });
+        return this.add('2d');
       }
     });
     Q.Sprite.extend("Block", {
@@ -56,18 +57,17 @@
       }
     });
     Q.scene("stage1", function(stage) {
-      var num, player, _i, _results;
-      console.log("stage1!");
-      player = new Q.Player({
-        stage: stage
-      });
+      var gun, num, player, _i, _results;
+      player = new Q.Player({});
+      gun = new Q.Gun({});
       stage.insert(player);
+      stage.insert(gun, player);
       stage.add('viewport').follow(player, {
         x: true,
         y: true
       });
       _results = [];
-      for (num = _i = 1; _i <= 10; num = ++_i) {
+      for (num = _i = 1; _i <= 30; num = ++_i) {
         _results.push(stage.insert(new Q.Block({
           x: num * 70 + 35,
           y: 200
@@ -77,15 +77,19 @@
     });
     Q.animations("player", {
       run: {
-        frames: [1, 2],
+        frames: [4, 5, 6, 7],
         rate: 1 / 4
       },
       stand: {
-        frames: [0, 0, 0, 4],
+        frames: [0],
+        rate: 1
+      },
+      withGun: {
+        frames: [1],
         rate: 1
       }
     });
-    return Q.load("herman.png", function() {
+    return Q.load("herman.png, gun.png, bullet.png", function() {
       Q.sheet("herman", "herman.png", {
         tilew: 140,
         tileh: 140

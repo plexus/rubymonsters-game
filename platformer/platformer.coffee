@@ -4,11 +4,8 @@ random_color = ->
 Platformer = ->
   window.Q = Quintus(development: true).include("Sprites, Scenes, 2D, Input, UI, Touch, Anim").setup(maximize: true).controls()
 
-  console.log "Platformer"
-
   Q.Sprite.extend "Player",
     init: (p) ->
-      console.log "init herman"
       @_super p,
         sprite: "player" #needs to match Q.animations
         sheet: "herman"
@@ -18,18 +15,23 @@ Platformer = ->
         flip: "x"
         speed: 400
         jumpSpeed: -600
-      @add '2d, platformerControls, animation'
+      @add '2d, platformerControls, animation, alwaysFaceFront'
 
     step: ->
       if @p.vx == 0
         @play "stand"
       else
         @play "run"
-      if @p.vx > 0
-        @p.flip = 'x'
-      if @p.vx < 0
-        @p.flip = false
 
+  Q.Sprite.extend "Gun",
+    init: (p) ->
+      @_super p,
+        asset: "gun.png"
+        flip: 'x'
+        # offsetX: -50
+        # offsetY: -35
+      @add '2d'
+      #@off 'hit'
 
   Q.Sprite.extend "Block",
     init: (p) ->
@@ -43,23 +45,27 @@ Platformer = ->
       ctx.fillRect -@p.cx, -@p.cy, @p.w, @p.h
 
   Q.scene "stage1", (stage) ->
-    console.log "stage1!"
-    player = new Q.Player({stage: stage})
+    player = new Q.Player({})
+    gun = new Q.Gun({})
     stage.insert player
+    stage.insert gun, player
     stage.add('viewport').follow(player,{ x: true, y: true })
 
-    for num in [1..10]
+    for num in [1..30]
       stage.insert new Q.Block({x: num*70+35, y: 200})
 
   Q.animations "player",
     run:
-      frames: [1,2]
+      frames: [4,5,6,7]
       rate: (1/4)
     stand:
-      frames: [0,0,0,4]
+      frames: [0]
+      rate: 1
+    withGun:
+      frames: [1]
       rate: 1
 
-  Q.load "herman.png", ->
+  Q.load "herman.png, gun.png, bullet.png", ->
     Q.sheet "herman", "herman.png",
       tilew:140
       tileh:140
