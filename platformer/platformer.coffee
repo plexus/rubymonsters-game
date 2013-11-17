@@ -10,7 +10,7 @@ Platformer = ->
         sprite: "player" #needs to match Q.animations
         sheet: "herman"
         x: 105
-        y: 105
+        y: 10
         animation: "run"
         flip: "x"
         speed: 400
@@ -28,11 +28,8 @@ Platformer = ->
       @_super p,
         asset: "gun.png"
         flip: 'x'
-        # offsetX: -50
-        # offsetY: -35
+        sensor: true
       @add '2d'
-      #@off 'hit'
-
   Q.Sprite.extend "Block",
     init: (p) ->
       @_super p,

@@ -18,7 +18,7 @@
           sprite: "player",
           sheet: "herman",
           x: 105,
-          y: 105,
+          y: 10,
           animation: "run",
           flip: "x",
           speed: 400,
@@ -38,7 +38,8 @@
       init: function(p) {
         this._super(p, {
           asset: "gun.png",
-          flip: 'x'
+          flip: 'x',
+          sensor: true
         });
         return this.add('2d');
       }
