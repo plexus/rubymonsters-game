@@ -15,13 +15,50 @@ Platformer = ->
         flip: "x"
         speed: 400
         jumpSpeed: -600
+        withGun: true
       @add '2d, platformerControls, animation, alwaysFaceFront'
+      Q.input.on("action", this, "swapGun")
+      Q.input.on("fire", this, "fireGun")
 
     step: ->
-      if @p.vx == 0
-        @play "withGun"
+      if @p.withGun
+        if @p.vx == 0
+          @play "withGun"
+        else
+          @play "withGunRun"
       else
-        @play "run"
+        if @p.vx == 0
+          @play "stand"
+        else
+          @play "run"
+
+    swapGun: ->
+      if @p.withGun
+        Q('Gun').invoke "hide"
+      else
+        Q('Gun').invoke "show"
+      @p.withGun = !@p.withGun
+
+    flipped: ->
+      if @p.flip == 'x'
+        1
+      else
+        -1
+
+    fireGun: ->
+      return unless @p.withGun
+      bullet = new Q.Bullet
+        vx: 600 * @flipped()
+        x: @p.x + (115 * @flipped())
+        y: @p.y + 2
+        flip: @p.flip
+
+      @p.stage.insert bullet
+
+  Q.MovingSprite.extend "Bullet",
+    init: (p) ->
+      @_super p,
+        asset: "bullet.png"
 
   Q.Sprite.extend "Gun",
     init: (p) ->
@@ -48,7 +85,7 @@ Platformer = ->
       ctx.fillRect -@p.cx, -@p.cy, @p.w, @p.h
 
   Q.scene "stage1", (stage) ->
-    player = new Q.Player({})
+    player = new Q.Player({stage: stage})
     gun = new Q.Gun({})
     stage.insert player
     stage.insert gun, player
@@ -61,13 +98,16 @@ Platformer = ->
   Q.animations "player",
     run:
       frames: [4,5,6,7]
-      rate: (1/4)
+      rate: 1/4
     stand:
       frames: [0]
       rate: 1
     withGun:
       frames: [1]
       rate: 1
+    withGunRun:
+      frames: [1,2,3]
+      rate: 1/4
 
   Q.load "herman.png, gun.png, bullet.png", ->
     Q.sheet "herman", "herman.png",

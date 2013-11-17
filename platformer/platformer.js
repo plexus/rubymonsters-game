@@ -22,16 +22,62 @@
           animation: "run",
           flip: "x",
           speed: 400,
-          jumpSpeed: -600
+          jumpSpeed: -600,
+          withGun: true
         });
-        return this.add('2d, platformerControls, animation, alwaysFaceFront');
+        this.add('2d, platformerControls, animation, alwaysFaceFront');
+        Q.input.on("action", this, "swapGun");
+        return Q.input.on("fire", this, "fireGun");
       },
       step: function() {
-        if (this.p.vx === 0) {
-          return this.play("withGun");
+        if (this.p.withGun) {
+          if (this.p.vx === 0) {
+            return this.play("withGun");
+          } else {
+            return this.play("withGunRun");
+          }
         } else {
-          return this.play("run");
+          if (this.p.vx === 0) {
+            return this.play("stand");
+          } else {
+            return this.play("run");
+          }
         }
+      },
+      swapGun: function() {
+        if (this.p.withGun) {
+          Q('Gun').invoke("hide");
+        } else {
+          Q('Gun').invoke("show");
+        }
+        return this.p.withGun = !this.p.withGun;
+      },
+      flipped: function() {
+        if (this.p.flip === 'x') {
+          return 1;
+        } else {
+          return -1;
+        }
+      },
+      fireGun: function() {
+        var bullet;
+        if (!this.p.withGun) {
+          return;
+        }
+        bullet = new Q.Bullet({
+          vx: 600 * this.flipped(),
+          x: this.p.x + (115 * this.flipped()),
+          y: this.p.y + 2,
+          flip: this.p.flip
+        });
+        return this.p.stage.insert(bullet);
+      }
+    });
+    Q.MovingSprite.extend("Bullet", {
+      init: function(p) {
+        return this._super(p, {
+          asset: "bullet.png"
+        });
       }
     });
     Q.Sprite.extend("Gun", {
@@ -64,7 +110,9 @@
     });
     Q.scene("stage1", function(stage) {
       var gun, player;
-      player = new Q.Player({});
+      player = new Q.Player({
+        stage: stage
+      });
       gun = new Q.Gun({});
       stage.insert(player);
       stage.insert(gun, player);
@@ -91,6 +139,10 @@
       withGun: {
         frames: [1],
         rate: 1
+      },
+      withGunRun: {
+        frames: [1, 2, 3],
+        rate: 1 / 4
       }
     });
     return Q.load("herman.png, gun.png, bullet.png", function() {
