@@ -19,7 +19,7 @@ Platformer = ->
 
     step: ->
       if @p.vx == 0
-        @play "stand"
+        @play "withGun"
       else
         @play "run"
 
@@ -28,8 +28,14 @@ Platformer = ->
       @_super p,
         asset: "gun.png"
         flip: 'x'
-        sensor: true
-      @add '2d'
+        type: 0
+        x: 65
+        y: 10
+
+    flipped: ->
+      @p.x *= -1
+      @p.flip = @container.p.flip
+
   Q.Sprite.extend "Block",
     init: (p) ->
       @_super p,
@@ -46,10 +52,11 @@ Platformer = ->
     gun = new Q.Gun({})
     stage.insert player
     stage.insert gun, player
+    player.on('flipped', gun, 'flipped')
     stage.add('viewport').follow(player,{ x: true, y: true })
 
-    for num in [1..30]
-      stage.insert new Q.Block({x: num*70+35, y: 200})
+    #for num in [1..30]
+    stage.insert new Q.Block({x: 105, y: 500, w: 1000})
 
   Q.animations "player",
     run:

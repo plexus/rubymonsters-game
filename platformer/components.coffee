@@ -9,27 +9,12 @@ Components = ->
         -1
       else
         1
-      if p.vx * factor > 0
+      if p.vx * factor > 0 && p.flip != 'x'
         p.flip = 'x'
-      if p.vx * factor < 0
+        @entity.trigger('flipped')
+      if p.vx * factor < 0 && p.flip
         p.flip = false
-
-  Q.component 'subSprite',
-    added: ->
-      @entity.p.collisionMask = 0
-      @entity.p.sensor = true
-      @entity.on("step", this, "step")
-    step: ->
-      parent = @entity.p.superSprite.p
-      p = @entity.p
-      p.flip = parent.flip
-      if p.flip == 'x'
-        p.x = parent.x - p.offsetX
-        p.y = parent.y + p.offsetY
-      else
-        p.x = parent.x + p.offsetX
-        p.y = parent.y + p.offsetY
-
+        @entity.trigger('flipped')
 
 
 window.addEventListener "load", Components

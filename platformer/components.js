@@ -3,7 +3,7 @@
   var Components;
 
   Components = function() {
-    Q.component('alwaysFaceFront', {
+    return Q.component('alwaysFaceFront', {
       added: function() {
         return this.entity.on("step", this, "flipStep");
       },
@@ -11,31 +11,13 @@
         var factor, p;
         p = this.entity.p;
         factor = this.entity.p.backwards ? -1 : 1;
-        if (p.vx * factor > 0) {
+        if (p.vx * factor > 0 && p.flip !== 'x') {
           p.flip = 'x';
+          this.entity.trigger('flipped');
         }
-        if (p.vx * factor < 0) {
-          return p.flip = false;
-        }
-      }
-    });
-    return Q.component('subSprite', {
-      added: function() {
-        this.entity.p.collisionMask = 0;
-        this.entity.p.sensor = true;
-        return this.entity.on("step", this, "step");
-      },
-      step: function() {
-        var p, parent;
-        parent = this.entity.p.superSprite.p;
-        p = this.entity.p;
-        p.flip = parent.flip;
-        if (p.flip === 'x') {
-          p.x = parent.x - p.offsetX;
-          return p.y = parent.y + p.offsetY;
-        } else {
-          p.x = parent.x + p.offsetX;
-          return p.y = parent.y + p.offsetY;
+        if (p.vx * factor < 0 && p.flip) {
+          p.flip = false;
+          return this.entity.trigger('flipped');
         }
       }
     });

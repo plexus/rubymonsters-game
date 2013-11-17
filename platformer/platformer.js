@@ -28,7 +28,7 @@
       },
       step: function() {
         if (this.p.vx === 0) {
-          return this.play("stand");
+          return this.play("withGun");
         } else {
           return this.play("run");
         }
@@ -36,12 +36,17 @@
     });
     Q.Sprite.extend("Gun", {
       init: function(p) {
-        this._super(p, {
+        return this._super(p, {
           asset: "gun.png",
           flip: 'x',
-          sensor: true
+          type: 0,
+          x: 65,
+          y: 10
         });
-        return this.add('2d');
+      },
+      flipped: function() {
+        this.p.x *= -1;
+        return this.p.flip = this.container.p.flip;
       }
     });
     Q.Sprite.extend("Block", {
@@ -58,23 +63,21 @@
       }
     });
     Q.scene("stage1", function(stage) {
-      var gun, num, player, _i, _results;
+      var gun, player;
       player = new Q.Player({});
       gun = new Q.Gun({});
       stage.insert(player);
       stage.insert(gun, player);
+      player.on('flipped', gun, 'flipped');
       stage.add('viewport').follow(player, {
         x: true,
         y: true
       });
-      _results = [];
-      for (num = _i = 1; _i <= 30; num = ++_i) {
-        _results.push(stage.insert(new Q.Block({
-          x: num * 70 + 35,
-          y: 200
-        })));
-      }
-      return _results;
+      return stage.insert(new Q.Block({
+        x: 105,
+        y: 500,
+        w: 1000
+      }));
     });
     Q.animations("player", {
       run: {
