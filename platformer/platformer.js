@@ -22,7 +22,7 @@
           animation: "run",
           flip: "x",
           speed: 400,
-          jumpSpeed: -600,
+          jumpSpeed: -800,
           withGun: true
         });
         this.add('2d, platformerControls, animation, alwaysFaceFront');
@@ -65,7 +65,7 @@
           return;
         }
         bullet = new Q.Bullet({
-          vx: 600 * this.flipped(),
+          vx: 900 * this.flipped(),
           x: this.p.x + (115 * this.flipped()),
           y: this.p.y + 2,
           flip: this.p.flip

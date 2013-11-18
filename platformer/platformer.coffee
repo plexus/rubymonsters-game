@@ -14,7 +14,7 @@ Platformer = ->
         animation: "run"
         flip: "x"
         speed: 400
-        jumpSpeed: -600
+        jumpSpeed: -800
         withGun: true
       @add '2d, platformerControls, animation, alwaysFaceFront'
       Q.input.on("action", this, "swapGun")
@@ -48,7 +48,7 @@ Platformer = ->
     fireGun: ->
       return unless @p.withGun
       bullet = new Q.Bullet
-        vx: 600 * @flipped()
+        vx: 900 * @flipped()
         x: @p.x + (115 * @flipped())
         y: @p.y + 2
         flip: @p.flip
