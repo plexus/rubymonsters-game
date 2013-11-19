@@ -15,7 +15,10 @@
    id="svg8721"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="sprite_map.svg">
+   sodipodi:docname="sprite_map.svg"
+   inkscape:export-filename="/home/arne/projects/quintes-game/graphics/sprite_map.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs8723" />
   <sodipodi:namedview
@@ -26,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.7603807"
-     inkscape:cx="279.11243"
-     inkscape:cy="378.36777"
+     inkscape:cx="233.37087"
+     inkscape:cy="242.09666"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
